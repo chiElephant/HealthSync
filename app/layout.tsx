@@ -22,7 +22,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html
+      lang='en'
+      suppressHydrationWarning>
       <body
         className={cn(
           'min-h-screen bg-dark-300 font-sans antialiased',
@@ -30,9 +32,7 @@ export default function RootLayout({
         )}>
         <ThemeProvider
           attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange>
+          defaultTheme='dark'>
           {children}
         </ThemeProvider>
       </body>
