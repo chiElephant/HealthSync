@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
-
 import {
   FormControl,
   // FormDescription,
@@ -16,6 +14,11 @@ import Image from 'next/image';
 import 'react-phone-number-input/style.css';
 import PhoneInput from 'react-phone-number-input';
 import { E164Number } from 'libphonenumber-js/core';
+import DatePicker from 'react-datepicker';
+
+import 'react-datepicker/dist/react-datepicker.css';
+// import { getMonth, getYear } from 'date-fns';
+
 interface CustomProps {
   control: Control<any>;
   fieldType: FormFieldType;
@@ -27,12 +30,21 @@ interface CustomProps {
   disabled?: boolean;
   dateFormat?: string;
   showTimeSelect?: boolean;
+  todayButton?: string;
   children?: React.ReactNode;
   renderSkeleton?: (field: any) => React.ReactNode;
 }
 
 const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
-  const { fieldType, iconSrc, iconAlt, placeholder } = props;
+  const {
+    fieldType,
+    iconSrc,
+    iconAlt,
+    placeholder,
+    showTimeSelect,
+    dateFormat,
+    todayButton,
+  } = props;
   switch (fieldType) {
     case FormFieldType.INPUT:
       return (
@@ -68,6 +80,46 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             className={'input-phone'}
           />
         </FormControl>
+      );
+    case FormFieldType.DATE_PICKER:
+      const currentDate = new Date();
+      // Extract year, month, and day
+      // const year = currentDate.getFullYear();
+      // const month = (currentDate.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-indexed
+      // const day = currentDate.getDate().toString().padStart(2, '0');
+      // Format the date as 'YYYY/MM/DD'
+      // const formattedDate = `${year}/${month}/${day}`;
+      return (
+        <div className='flex rounded-md border border-dark-500 bg-dark-400'>
+          <Image
+            src='/assets/icons/calendar.svg'
+            height={24}
+            width={24}
+            alt='user'
+            className='ml-2'
+          />
+          <FormControl>
+            <DatePicker
+              showTimeSelect={showTimeSelect ?? false}
+              selected={field.value}
+              onChange={(date) => field.onChange(date)}
+              timeInputLabel='Time:'
+              dateFormat={dateFormat ?? 'MM/dd/yyyy'}
+              className={'date-picker'}
+              maxDate={currentDate}
+              withPortal
+              openToDate={currentDate}
+              placeholderText='mm/dd/yyyy'
+              todayButton={todayButton ?? false}
+              closeOnScroll={true}
+              dateFormatCalendar='MMMM'
+              yearDropdownItemNumber={15}
+              scrollableYearDropdown
+              showYearDropdown
+              dropdownMode='select'
+            />
+          </FormControl>
+        </div>
       );
     default:
       break;
