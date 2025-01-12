@@ -92,6 +92,14 @@ const AppointmentForm = ({ type, patientId, userId }: AppointmentFormProps) => {
                 </SelectItem>
               ))}
             </CustomFormField>
+
+            <CustomFormField
+              fieldType={FormFieldType.DATE_PICKER}
+              control={form.control}
+              name='schedule'
+              label='Expected Appointment Date'
+              showTimeSelect
+              dateFormat='MM/dd/yyyy - h:mm aa'></CustomFormField>
           </>
         )}
         <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
