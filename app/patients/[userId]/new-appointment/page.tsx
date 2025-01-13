@@ -1,7 +1,8 @@
 import AppointmentForm from '@/components/forms/AppointmentForm';
 import { getPatient } from '@/lib/actions/patient.actions';
 import Image from 'next/image';
-const NewAppointment = async ({ params: { userId } }: SearchParamProps) => {
+const NewAppointment = async ({ params }: SearchParamProps) => {
+  const { userId } = await params;
   const patient = await getPatient(userId);
   return (
     <div className='flex h-screen max-h-screen'>
