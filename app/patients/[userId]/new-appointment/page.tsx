@@ -19,9 +19,7 @@ const NewAppointment = async ({ params: { userId } }: SearchParamProps) => {
             userId={userId}
             patientId={patient.$id}
           />
-          <p className='justify-items-end text-dark-600 xl:text-left'>
-            © 2025 HealthSync
-          </p>
+          <p className='copyright mt-10 py-12'>© 2025 HealthSync</p>
         </div>
       </section>
       <Image
