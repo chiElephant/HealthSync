@@ -32,9 +32,9 @@ const RegisterForm = ({ user }: { user: User }) => {
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
       ...PatientFormDefaultValues,
-      name: '',
-      email: '',
-      phone: '',
+      name: user?.name || '',
+      email: user?.email || '',
+      phone: user?.phone || '',
     },
   });
 
@@ -124,6 +124,8 @@ const RegisterForm = ({ user }: { user: User }) => {
             control={form.control}
             name='birthDate'
             label='Date of Birth'
+            maxDate={new Date(Date.now())}
+            todayButton={true}
           />
           <CustomFormField
             fieldType={FormFieldType.SKELETON}

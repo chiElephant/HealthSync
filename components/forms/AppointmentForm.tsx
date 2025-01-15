@@ -43,11 +43,12 @@ const AppointmentForm = ({
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: appointment ? appointment.primaryPhysician : '',
-      schedule: appointment ? new Date(appointment.schedule) : new Date(),
-      reason: appointment ? appointment.reason : '',
-      note: appointment ? appointment.note : '',
-      cancellationReason: appointment.cancellationReason || '',
+      primaryPhysician: appointment?.primaryPhysician || '',
+      schedule:
+        appointment ? new Date(appointment.schedule) : new Date(Date.now()),
+      reason: appointment?.reason || '',
+      note: appointment?.note || '',
+      cancellationReason: appointment?.cancellationReason || '',
     },
   });
 
@@ -172,6 +173,9 @@ const AppointmentForm = ({
               label='Expected Appointment Date'
               showTimeSelect
               dateFormat='MM/dd/yyyy - h:mm aa'
+              todayButton={true}
+              minDate={new Date(Date.now())}
+              maxDate={new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)}
             />
 
             <div className='flex flex-col gap-6 xl:flex-row'>

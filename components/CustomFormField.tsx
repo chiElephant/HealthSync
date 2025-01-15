@@ -32,8 +32,9 @@ interface CustomProps {
   disabled?: boolean;
   dateFormat?: string;
   showTimeSelect?: boolean;
-  todayButton?: string;
+  todayButton?: boolean;
   maxDate?: Date;
+  minDate?: Date;
   children?: React.ReactNode;
   renderSkeleton?: (field: any) => React.ReactNode;
 }
@@ -48,6 +49,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
     dateFormat,
     todayButton,
     maxDate,
+    minDate,
     renderSkeleton,
   } = props;
   switch (fieldType) {
@@ -116,11 +118,12 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
               timeInputLabel='Time:'
               dateFormat={dateFormat ?? 'MM/dd/yyyy'}
               className={'date-picker'}
-              maxDate={maxDate ?? currentDate}
+              maxDate={maxDate}
+              minDate={minDate ?? undefined}
               withPortal
               openToDate={currentDate}
               placeholderText='mm/dd/yyyy'
-              todayButton={todayButton ?? false}
+              todayButton={todayButton}
               closeOnScroll={true}
               dateFormatCalendar='MMMM'
               yearDropdownItemNumber={15}

@@ -28,6 +28,7 @@ const Register = async ({ params }: SearchParamProps) => {
         width={1000}
         alt='patient'
         className='side-img max-w-[390px]'
+        priority
       />
     </div>
   );
