@@ -42,10 +42,10 @@ const Admin = async () => {
             icon='/assets/icons/pending.svg'
           />
           <StatCard
-            type='cancelled'
-            count={appointments.cancelledCount}
+            type='canceled'
+            count={appointments.canceledCount}
             label='Canceled Appointments'
-            icon='/assets/icons/cancelled.svg'
+            icon='/assets/icons/canceled.svg'
           />
         </section>
         <DataTable
