@@ -8,6 +8,7 @@ import {
 } from '../appwrite.config';
 import { parseStringify } from '../utils';
 import { Appointment } from '@/types/appwrite.types';
+import { revalidatePath } from 'next/cache';
 
 export const createAppointment = async (
   appointmentData: CreateAppointmentParams
@@ -49,7 +50,7 @@ export const getAllAppointments = async () => {
     const initialCounts = {
       scheduledCount: 0,
       pendingCount: 0,
-      cancelledCount: 0,
+      canceledCount: 0,
     };
 
     const counts = (appointments.documents as Appointment[]).reduce(
@@ -58,8 +59,8 @@ export const getAllAppointments = async () => {
           acc.scheduledCount += 1;
         } else if (appointment.status === 'pending') {
           acc.pendingCount += 1;
-        } else if (appointment.status === 'cancelled') {
-          acc.cancelledCount += 1;
+        } else if (appointment.status === 'canceled') {
+          acc.canceledCount += 1;
         }
         return acc;
       },
@@ -73,6 +74,31 @@ export const getAllAppointments = async () => {
     };
 
     return parseStringify(data);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateAppointment = async ({
+  appointmentId,
+  appointment,
+}: UpdateAppointmentParams) => {
+  try {
+    const updatedAppointment = await databases.updateDocument(
+      DATABASE_ID!,
+      APPOINTMENT_COLLECTION_ID!,
+      appointmentId,
+      appointment
+    );
+
+    if (!updatedAppointment) {
+      throw new Error('Appointment Not Found');
+    }
+
+    // TODO Send SMS Notification
+
+    revalidatePath('/admin');
+    return parseStringify(updatedAppointment);
   } catch (error) {
     console.error(error);
   }

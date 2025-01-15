@@ -9,19 +9,31 @@ import SubmitButton from '../SubmitButton';
 import { useState } from 'react';
 import { getAppointmentSchema } from '@/lib/validation';
 import { useRouter } from 'next/navigation';
-import { createAppointment } from '@/lib/actions/appointment.actions';
+import {
+  createAppointment,
+  updateAppointment,
+} from '@/lib/actions/appointment.actions';
 import { FormFieldType } from './PatientForm';
 import { Doctors } from '@/constants';
 import { SelectItem } from '../ui/select';
 import Image from 'next/image';
+import { Appointment } from '@/types/appwrite.types';
 
 type AppointmentFormProps = {
   type: 'create' | 'cancel' | 'schedule';
   patientId: string;
   userId: string;
+  appointment: Appointment;
+  setOpen: (open: boolean) => void;
 };
 
-const AppointmentForm = ({ type, patientId, userId }: AppointmentFormProps) => {
+const AppointmentForm = ({
+  type,
+  patientId,
+  userId,
+  appointment,
+  setOpen,
+}: AppointmentFormProps) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -50,7 +62,7 @@ const AppointmentForm = ({ type, patientId, userId }: AppointmentFormProps) => {
         status = 'scheduled';
         break;
       case 'cancel':
-        status = 'cancelled';
+        status = 'canceled';
         break;
       default:
         status = 'pending';
@@ -74,6 +86,24 @@ const AppointmentForm = ({ type, patientId, userId }: AppointmentFormProps) => {
           router.push(
             `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
           );
+        }
+      } else {
+        const appointmentToUpdate = {
+          userId,
+          appointmentId: appointment?.$id,
+          appointment: {
+            primaryPhysician: values?.primaryPhysician,
+            schedule: new Date(values?.schedule),
+            status: status as Status,
+            cancellationReason: values?.cancellationReason,
+          },
+          type,
+        };
+        const updatedAppointment = await updateAppointment(appointmentToUpdate);
+
+        if (updatedAppointment && setOpen) {
+          setOpen(false);
+          form.reset();
         }
       }
     } catch (error) {
